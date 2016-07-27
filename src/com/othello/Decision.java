@@ -1,7 +1,7 @@
 package com.othello;
 
 /**
- *
+ * Class that is responsible for making some serious decisions.
  */
 public class Decision {
     public int maxIndex;
@@ -9,6 +9,11 @@ public class Decision {
     public String player;
     public String enemy;
 
+    /**
+     * Constructor for Decision class
+     * @param info info from command line arguments
+     * @param board the board object that represents the board state for the given turn
+     */
     public Decision(TurnInfo info, Board board) {
         this.maxIndex = board.getMaxIndex();
         this.player = info.getPlayer();
@@ -58,6 +63,11 @@ public class Decision {
         return 0;
     }
 
+    /**
+     * Determines if a given position on the board is a valid move
+     * @param position a position on the board
+     * @return whether the move is valid
+     */
     public boolean isValidMove(int position){
 
         return false;
