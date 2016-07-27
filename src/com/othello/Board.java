@@ -7,12 +7,11 @@ import java.util.Arrays;
 public class Board {
     public int width;
     public int height;
-
     @SerializedName("max-index")
     public int maxIndex;
-
     public String[] squares;
 
+    //region Getters and Setters
     public int getWidth() {
         return width;
     }
@@ -44,7 +43,12 @@ public class Board {
     public void setSquares(String[] squares) {
         this.squares = squares;
     }
+    //endregion
 
+    /**
+     * Override of the ToString method for the Board Object.
+     * @return String representation of the board
+     */
     @Override
     public String toString() {
         String[] squaresFormatted = this.squares;
