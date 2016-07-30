@@ -8,6 +8,8 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Othello {
 
@@ -23,36 +25,26 @@ public class Othello {
         server.setExecutor(null); // creates a default executor
         server.start();
 
-
-        /*
-        System.out.println("ARG Count: " + args.length);
-        if (args.length != 7){
-            return 1;
-        }
-
-
-
-        TurnInfo turnInfo = ValidateInput(args);
-
-        Board board = CreateBoard("{\n" +
-                "  \"width\": 8,\n" +
-                "  \"height\": 8,\n" +
-                "  \"max-index\": 63,\n" +
-                "  \"squares\": [\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"w\",\"b\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"b\",\"w\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"]\n" +
-                "}");
-
-        Decision decision = new Decision(turnInfo, board);
-        System.out.println("Current Board:\n");
-        System.out.println(board.toString());
-        */
     }
 
+    /**
+     * Http Request Handler
+     *
+     * Responsible for extracting parameters from the request and passing these
+     * values to the Decision class. The return value from the Decision class
+     * is then written into a response body and sent back to the client.
+     */
     static class OthelloHandler implements HttpHandler {
         @Override
-        public void handle(HttpExchange t) throws IOException {
+        public void handle(HttpExchange exchange) throws IOException {
+            Map<String, String> params = Othello.queryToMap(exchange.getRequestURI().getQuery());
+            Board board = CreateBoard(params.get("-b"));
+
+
+
             String response = "19";
-            t.sendResponseHeaders(200, response.length());
-            OutputStream os = t.getResponseBody();
+            exchange.sendResponseHeaders(200, response.length());
+            OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
         }
@@ -68,28 +60,23 @@ public class Othello {
         return gson.fromJson(board, Board.class);
     }
 
-    /**
-     * Validates the command line arguments
-     * @param args command line arguments
-     * @return the info related to the turn
-     */
-    private static TurnInfo ValidateInput(String[] args){
-        TurnInfo turnInfo = new TurnInfo();
-        String curPos, nextPos;
 
-        for (int count = 1; count < args.length; count++){
-            curPos = args[count];
-            nextPos = args[count + 1];
-            if (curPos.equals("-b")){
-                turnInfo.json = nextPos;
-            }else if (curPos.equals("-p")){
-                turnInfo.player = nextPos;
-            }else if (curPos.equals("-t")){
-                turnInfo.time = Integer.parseInt(nextPos);
+    /**
+     * Returns a Map of the parameters passed by the http request
+     * @param query the query of the uri
+     * @return a Map of the parameters
+     */
+    public static Map<String, String> queryToMap(String query){
+        Map<String, String> result = new HashMap<String, String>();
+        for (String param : query.split("&")) {
+            String pair[] = param.split("=");
+            if (pair.length>1) {
+                result.put(pair[0], pair[1]);
+            }else{
+                result.put(pair[0], "");
             }
         }
-
-        return turnInfo;
+        return result;
     }
 
 }
