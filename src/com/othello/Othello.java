@@ -1,19 +1,36 @@
 package com.othello;
 
 import com.google.gson.Gson;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 
-public class Main {
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+
+public class Othello {
 
     /**
-     * Main method
+     * Othello method
      * @param args command line arguments
      * @return move decision
      */
-    public static int main(String[] args) {
+    public static void main(String[] args) throws Exception {
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+        server.createContext("/othello", new OthelloHandler());
+        server.setExecutor(null); // creates a default executor
+        server.start();
+
+
+        /*
         System.out.println("ARG Count: " + args.length);
         if (args.length != 7){
             return 1;
         }
+
+
 
         TurnInfo turnInfo = ValidateInput(args);
 
@@ -27,8 +44,18 @@ public class Main {
         Decision decision = new Decision(turnInfo, board);
         System.out.println("Current Board:\n");
         System.out.println(board.toString());
+        */
+    }
 
-        return decision.DecideMove();
+    static class OthelloHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            String response = "19";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
     }
 
     /**
