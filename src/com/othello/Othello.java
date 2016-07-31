@@ -1,15 +1,19 @@
 package com.othello;
 
 import com.google.gson.Gson;
+import com.sun.glass.ui.SystemClipboard;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.net.URLDecoder.decode;
 
 public class Othello {
 
@@ -42,7 +46,7 @@ public class Othello {
 
 
 
-            String response = "19";
+            String response = board.toString();
             exchange.sendResponseHeaders(200, response.length());
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
@@ -67,8 +71,13 @@ public class Othello {
      * @return a Map of the parameters
      */
     public static Map<String, String> queryToMap(String query){
-        Map<String, String> result = new HashMap<String, String>();
-        for (String param : query.split("&")) {
+        Map<String, String> result = new HashMap<>();
+        String decodedQuery = "";
+
+        try{ decodedQuery = decode(query, "UTF-8"); }
+        catch (UnsupportedEncodingException e){ System.out.println(e.getMessage()); }
+
+        for (String param : decodedQuery.split("&")) {
             String pair[] = param.split("=");
             if (pair.length>1) {
                 result.put(pair[0], pair[1]);
