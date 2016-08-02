@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.ToIntFunction;
 
 import static java.net.URLDecoder.decode;
 
@@ -43,10 +44,11 @@ public class Othello {
         public void handle(HttpExchange exchange) throws IOException {
             Map<String, String> params = Othello.queryToMap(exchange.getRequestURI().getQuery());
             Board board = CreateBoard(params.get("-b"));
+            String player = params.get("-p");
+            int timeToDecide = Integer.parseInt(params.get("-t"));
 
-
-
-            String response = board.toString();
+            Decision decision = new Decision(board, player, timeToDecide);
+            String response = Integer.toString(decision.DecideMove());
             exchange.sendResponseHeaders(200, response.length());
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());

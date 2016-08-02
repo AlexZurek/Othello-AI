@@ -4,30 +4,25 @@ package com.othello;
  * Class that is responsible for making some serious decisions.
  */
 public class Decision {
-    public int maxIndex;
     public Board board;
     public String player;
     public String enemy;
+    public int timeLeft;
 
     /**
-     * Constructor for Decision class
-     * @param info info from command line arguments
-     * @param board the board object that represents the board state for the given turn
+     * Decision Constructor
+     * @param board the Board object that represents the current state
+     * @param player the player, either w or b
+     * @param timeToDecide remaining time to return a valid move
      */
-    public Decision(TurnInfo info, Board board) {
-        this.maxIndex = board.getMaxIndex();
-        this.player = info.getPlayer();
-        this.enemy = player.equals("w") ? "b" : "w";
+    public Decision(Board board, String player, int timeToDecide) {
+        this.board = board;
+        this.player = player;
+        this.enemy = player.equals("w") ? "w" : "b";
+        this.timeLeft = timeToDecide - 500;
     }
 
     //region Getters and Setters
-    public int getMaxIndex() {
-        return maxIndex;
-    }
-
-    public void setMaxIndex(int maxIndex) {
-        this.maxIndex = maxIndex;
-    }
 
     public Board getBoard() {
         return board;
@@ -52,15 +47,29 @@ public class Decision {
     public void setEnemy(String enemy) {
         this.enemy = enemy;
     }
+
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
+    }
     //endregion
 
     public int DecideMove(){
-        for (int i = 0; i <= this.getMaxIndex(); i++){
+        DetermineValidMovesForBoard();
+        return 19;
+    }
+
+    private void DetermineValidMovesForBoard() {
+        String[] currentBoard = board.getSquares();
+        for (int i = 0; i <= board.getMaxIndex(); i++){
             if (isValidMove(i)){
-                return i;
+                currentBoard[i] = "v";
             }
         }
-        return 0;
+        board.setSquares(currentBoard);
     }
 
     /**

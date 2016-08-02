@@ -49,6 +49,7 @@ public class BoardTest {
                                 "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
                                 "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
                                 "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"]\n" + "}";
+        System.out.println(json);
         Gson gson = new Gson();
         Board board = gson.fromJson(json, Board.class);
 
@@ -73,21 +74,10 @@ public class BoardTest {
         String query = "-b=%22%7B%22width%22%3A8%2C%22height%22%3A8%2C%22max-index%22%3A63%2C%22squares%22%3A%5B%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22w%22%2C%22b%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22b%22%2C%22w%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%2C%22-%22%5D%7D%22&-p=black&-t=15000";
         Map<String, String> params = Othello.queryToMap(query);
 
-        String json = params.get("-b").replace("\"", "\\\"").substring(1);
-        json = json.replace("\\\":", "\\\": ");
-        int secondFromLast = json.length() - 2;
-        json = json.substring(0, secondFromLast) + json.substring(secondFromLast + 1);
-
-        json.substring(1);
-        secondFromLast = json.length() - 1;
-        json = json.substring(0, secondFromLast) + json.substring(secondFromLast + 1) + "\"";
-
-        assertEquals(json.substring(0,1), "\"");
+        String json = params.get("-b");
         json = json.substring(1, json.length()-1);
 
         Gson gson = new Gson();
-
-        System.out.println(json);
         Board board = gson.fromJson(json, Board.class);
 
         String expected = "Board {" +
