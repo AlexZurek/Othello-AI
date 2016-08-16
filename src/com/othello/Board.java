@@ -5,11 +5,18 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Arrays;
 
 public class Board {
-    public int width;
-    public int height;
+    private int width;
+    private int height;
     @SerializedName("max-index")
-    public int maxIndex;
-    public String[] squares;
+    private int maxIndex;
+    private String[] squares;
+
+    public Board(int width, int height, int maxIndex, String[] squares) {
+        this.width = width;
+        this.height = height;
+        this.maxIndex = maxIndex;
+        this.squares = squares;
+    }
 
     //region Getters and Setters
     public int getWidth() {
@@ -51,14 +58,14 @@ public class Board {
      */
     @Override
     public String toString() {
-        String[] squaresFormatted = this.squares;
-        for (int i = this.width; i < this.getMaxIndex(); i+=width){
+        String[] squaresFormatted = getSquares();
+        for (int i = getWidth(); i < this.getMaxIndex(); i += getWidth()){
             squaresFormatted[i] = "\n\t\t " + squaresFormatted[i];
         }
         return "Board {" +
-                "\n\twidth    = " + width +
-                "\n\theight   = " + height +
-                "\n\tmaxIndex = " + maxIndex +
+                "\n\twidth    = " + getWidth() +
+                "\n\theight   = " + getHeight() +
+                "\n\tmaxIndex = " + getMaxIndex() +
                 "\n\tsquares  = \n\t\t" + Arrays.toString(squaresFormatted) +
                 '}';
     }

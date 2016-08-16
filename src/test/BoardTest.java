@@ -10,24 +10,11 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class BoardTest {
+public class BoardTest extends TestBase {
 
     @Test
     public void CreateBoardFromJson(){
-        String json = "{\n" +
-                "  \"width\": 8,\n" +
-                "  \"height\": 8,\n" +
-                "  \"max-index\": 63,\n" +
-                "  \"squares\": [\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"w\",\"b\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"b\",\"w\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"]\n" + "}";
-        Gson gson = new Gson();
-        Board board = gson.fromJson(json, Board.class);
+        Board board = CreateStartingBoard();
 
         assertEquals(8, board.getWidth());
         assertEquals(8, board.getHeight());
@@ -37,21 +24,7 @@ public class BoardTest {
 
     @Test
     public void BoardToStringWorks(){
-        String json = "{\n" +
-                "  \"width\": 8,\n" +
-                "  \"height\": 8,\n" +
-                "  \"max-index\": 63,\n" +
-                "  \"squares\": [\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"w\",\"b\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"b\",\"w\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"," +
-                                "\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"]\n" + "}";
-        System.out.println(json);
-        Gson gson = new Gson();
-        Board board = gson.fromJson(json, Board.class);
+        Board board = CreateStartingBoard();
 
         String expected = "Board {" +
                 "\n\twidth    = 8"  +
@@ -93,6 +66,7 @@ public class BoardTest {
                 "\n\t\t -, -, -, -, -, -, -, -, " +
                 "\n\t\t -, -, -, -, -, -, -, -, " +
                 "\n\t\t -, -, -, -, -, -, -, -]" + '}';
+
         assertEquals(expected, board.toString());
     }
 }

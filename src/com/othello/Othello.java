@@ -1,10 +1,11 @@
 package com.othello;
 
 import com.google.gson.Gson;
-import com.sun.glass.ui.SystemClipboard;
+import com.google.gson.internal.Excluder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import com.sun.tools.internal.ws.wsdl.document.jaxws.Exception;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,7 +13,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.ToIntFunction;
 
 import static java.net.URLDecoder.decode;
 
@@ -23,11 +23,11 @@ public class Othello {
      * @param args command line arguments
      * @return move decision
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
 
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/othello", new OthelloHandler());
-        server.setExecutor(null); // creates a default executor
+        server.setExecutor(null);
         server.start();
 
     }
@@ -66,7 +66,6 @@ public class Othello {
         return gson.fromJson(board, Board.class);
     }
 
-
     /**
      * Returns a Map of the parameters passed by the http request
      * @param query the query of the uri
@@ -81,7 +80,7 @@ public class Othello {
 
         for (String param : decodedQuery.split("&")) {
             String pair[] = param.split("=");
-            if (pair.length>1) {
+            if (pair.length > 1) {
                 result.put(pair[0], pair[1]);
             }else{
                 result.put(pair[0], "");
